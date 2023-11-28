@@ -9,9 +9,17 @@ RUN apk add py3-pip
 RUN apk update
 RUN pip3 install --upgrade pip
 
-#Copying local scripts into container image
-ADD ./* ./
+#Copying local scripts into container image Working Directory
+WORKDIR /app
+COPY ./* /app/
 
 #Installed package requirements
-RUN pip3 install -r ./requirements.txt
+RUN pip3 --no-cache-dir install -r /app/requirements.txt
 RUN apk update
+
+#Exposing flask app port -- 5000
+EXPOSE 5000
+
+#Running Flask App during container execution
+ENTRYPOINT [ "python3" ]
+CMD [ "app.py" ]

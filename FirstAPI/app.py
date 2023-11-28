@@ -10,11 +10,11 @@ names = {"tim": {"age":40,"gender":"Male"},
 
 
 class HelloWorld(Resource):
-    def get(self,name):
-        return names[name]
+    def get(self):
+        return "Hello world" #names[name]
     
     
-api.add_resource(HelloWorld, "/hello/<string:name>")
+api.add_resource(HelloWorld, "/hello")
 
 if __name__ == "__main__":
     app.run(debug=True)
