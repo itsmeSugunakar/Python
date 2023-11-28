@@ -22,4 +22,4 @@ EXPOSE 5000
 
 #Running Flask App during container execution
 ENTRYPOINT [ "python3" ]
-CMD [ "app.py" ]
+CMD [ "/app/app.py" ]
