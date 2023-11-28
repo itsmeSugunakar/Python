@@ -1,9 +1,20 @@
 from flask import Flask
-import logging as logger
-logger.basicConfig(level="DEBUG")
+from flask_restful import Api, Resource
 
 app = Flask(__name__)
+api = Api(app)
 
-@app.route("/")
-def home():
-    return "Hello World, This is from Flask App!"
+names = {"tim": {"age":40,"gender":"Male"},
+         "joe": {"age":38,"gender":"Female"},
+         "marty": {"age":28,"gender":"Male"}}
+
+
+class HelloWorld(Resource):
+    def get(self,name):
+        return names[name]
+    
+    
+api.add_resource(HelloWorld, "/hello/<string:name>")
+
+if __name__ == "__main__":
+    app.run(debug=True)
