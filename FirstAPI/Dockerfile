@@ -11,7 +11,8 @@ RUN pip3 install --upgrade pip
 
 #Copying local scripts into container image Working Directory
 WORKDIR /app
-COPY ./* /app/
+COPY requirements.txt /app
+COPY app.py /app
 
 #Installed package requirements
 RUN pip3 --no-cache-dir install -r /app/requirements.txt
@@ -21,5 +22,5 @@ RUN apk update
 EXPOSE 5000
 
 #Running Flask App during container execution
-ENTRYPOINT [ "python3" ]
-CMD [ "/app/app.py" ]
+#ENTRYPOINT ["python3"]
+CMD ["flask", "run","--host","0.0.0.0","--port","5000"]
