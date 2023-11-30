@@ -1,5 +1,8 @@
 # Using Alpine Latest image
 FROM alpine:latest
+RUN apk upgrade
+RUN apk add --upgrade apk-tools
+RUN apk upgrade --available
 
 #Updating Python with no cache to make image lite
 RUN apk add --no-cache python3-dev
