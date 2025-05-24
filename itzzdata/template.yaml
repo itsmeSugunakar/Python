@@ -1,0 +1,6 @@
+ApiGatewayDeployment:
+  Type: AWS::ApiGateway::Deployment
+  Properties:
+    RestApiId: !Ref ApiGateway
+    StageName: prod
+  DependsOn: ApiGatewayMethod
