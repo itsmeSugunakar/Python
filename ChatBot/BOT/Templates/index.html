@@ -1,21 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Chatbot</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}">
 </head>
 <body>
-    <h2>Chat with Bot</h2>
-    <div id="chatbox"></div>
-    <input type="text" id="userInput" placeholder="Say something..." autofocus>
-    <button onclick="sendMessage()">Send</button>
-
+    <!-- Chatbot Floating Button -->
+    <button id="open-chatbot-btn" title="Chat with Bot" onclick="openChatbot()" style="display: block;">
+        💬
+    </button>
+    <!-- Chatbot Window -->
+    <div id="chatbot-window" style="display: none;">
+        <div id="chatbot-header">
+            Chat with Alia
+            <button id="close-chatbot" onclick="closeChatbot()" title="Close">&times;</button>
+        </div>
+        <div id="chatbox"></div>
+        <div id="chatbot-input-area">
+            <input type="text" id="userInput" placeholder="Say something..." autofocus onkeydown="if(event.key==='Enter'){sendMessage();}">
+            <button id="sendBtn" onclick="sendMessage()" method="get">Send</button>
+        </div>
+    </div>
     <script>
+        function openChatbot() {
+            document.getElementById('chatbot-window').style.display = 'flex';
+            document.getElementById('open-chatbot-btn').style.display = 'none';
+            setTimeout(() => document.getElementById('userInput').focus(), 100);
+        }
+        function closeChatbot() {
+            document.getElementById('chatbot-window').style.display = 'none';
+            document.getElementById('open-chatbot-btn').style.display = 'flex';
+        }
         function sendMessage() {
             var userText = $("#userInput").val();
-            $("#chatbox").append("<p><strong>You:</strong> " + userText + "</p>");
+            if (!userText.trim()) return;
+            $("#chatbox").append("<p><strong>You:</strong> " + $("<div>").text(userText).html() + "</p>");
+            $("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
+            // Call Flask /get route and display bot response
             $.get("/get", { msg: userText }).done(function(data) {
-                $("#chatbox").append("<p><strong>Bot:</strong> " + data + "</p>");
+                // If response is a string, show as is; if it's JSON, show .response or .message
+                let botReply = data.response || data.message || data;
+                $("#chatbox").append("<p><strong>Bot:</strong> " + $("<div>").text(botReply).html() + "</p>");
+                $("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
                 $("#userInput").val("");
             });
         }
